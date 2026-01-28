@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Content Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1><i class="fas fa-calendar-alt"></i> Social Media Content Calendar</h1>
+                    <p class="subtitle">Plan and organize your content across all platforms</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="exportBtn" data-testid="export-csv-button">
+                        <i class="fas fa-download"></i> Export CSV
+                    </button>
+                    <button class="btn btn-primary" id="addContentBtn" data-testid="add-content-button">
+                        <i class="fas fa-plus"></i> Add Content
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- View Toggle & Navigation -->
+        <div class="controls">
+            <div class="view-toggle">
+                <button class="toggle-btn active" id="monthViewBtn" data-testid="month-view-button">
+                    <i class="fas fa-calendar"></i> Month
+                </button>
+                <button class="toggle-btn" id="weekViewBtn" data-testid="week-view-button">
+                    <i class="fas fa-calendar-week"></i> Week
+                </button>
+            </div>
+
+            <div class="calendar-nav">
+                <button class="nav-btn" id="prevBtn" data-testid="prev-button">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h2 id="currentPeriod" data-testid="current-period">January 2024</h2>
+                <button class="nav-btn" id="nextBtn" data-testid="next-button">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="btn-today" id="todayBtn" data-testid="today-button">Today</button>
+            </div>
+
+            <div class="platform-legend">
+                <span class="legend-item">
+                    <span class="legend-color" style="background: #1877f2;"></span>
+                    Facebook
+                </span>
+                <span class="legend-item">
+                    <span class="legend-color" style="background: #e4405f;"></span>
+                    Instagram
+                </span>
+                <span class="legend-item">
+                    <span class="legend-color" style="background: #1da1f2;"></span>
+                    Twitter
+                </span>
+                <span class="legend-item">
+                    <span class="legend-color" style="background: #0a66c2;"></span>
+                    LinkedIn
+                </span>
+            </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-container">
+            <div id="monthView" class="calendar-view active">
+                <div class="calendar-header" id="calendarHeader"></div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+
+            <div id="weekView" class="calendar-view week-view">
+                <div class="week-header" id="weekHeader"></div>
+                <div class="week-grid" id="weekGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Content Modal -->
+    <div class="modal" id="contentModal" data-testid="content-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle" data-testid="modal-title">Add New Content</h3>
+                <button class="close-btn" id="closeModal" data-testid="close-modal-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="contentForm">
+                    <div class="form-group">
+                        <label for="contentTitle">Title</label>
+                        <input type="text" id="contentTitle" data-testid="content-title-input" required placeholder="Enter content title">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contentDate">Date</label>
+                            <input type="date" id="contentDate" data-testid="content-date-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contentTime">Time</label>
+                            <input type="time" id="contentTime" data-testid="content-time-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contentPlatform">Platform</label>
+                            <select id="contentPlatform" data-testid="content-platform-select" required>
+                                <option value="">Select platform</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="twitter">Twitter</option>
+                                <option value="linkedin">LinkedIn</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contentType">Content Type</label>
+                            <select id="contentType" data-testid="content-type-select" required>
+                                <option value="">Select type</option>
+                                <option value="post">Post</option>
+                                <option value="story">Story</option>
+                                <option value="reel">Reel</option>
+                                <option value="video">Video</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contentDescription">Description</label>
+                        <textarea id="contentDescription" data-testid="content-description-input" rows="4" placeholder="Enter content description or notes"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn" data-testid="cancel-button">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="saveBtn" data-testid="save-button">Save Content</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Detail Modal -->
+    <div class="modal" id="detailModal" data-testid="detail-modal">
+        <div class="modal-content modal-detail">
+            <div class="modal-header">
+                <h3 data-testid="detail-modal-title">Content Details</h3>
+                <button class="close-btn" id="closeDetailModal" data-testid="close-detail-modal-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-content" id="detailContent"></div>
+                <div class="detail-actions">
+                    <button class="btn btn-secondary" id="editBtn" data-testid="edit-content-button">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-danger" id="deleteBtn" data-testid="delete-content-button">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
